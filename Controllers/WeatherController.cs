@@ -1,6 +1,6 @@
 
 using climapi.Services;
-using climapi.Models.Current;
+using climapi.Models.MyCurrent;
 using Microsoft.AspNetCore.Mvc;
 
 namespace climapi.Controllers;
@@ -13,15 +13,15 @@ public class WeatherController : ControllerBase
 
     public WeatherController()
     {
-        string apiKey = "yourWeatherApiKey";
+        string apiKey = "e4ee022633474f34acd163310212812";
         _weatherApiClient = new WeatherApiClient(apiKey);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<Current>> GetCurrent(){
+    [HttpGet("{q}")]
+    public async Task<ActionResult<MyCurrent>> GetCurrent(string q){
         try
         {
-            return await _weatherApiClient.getCurrentAsync("Havana");
+            return await _weatherApiClient.getCurrentAsync(q);
         }
         catch (Exception)
         {

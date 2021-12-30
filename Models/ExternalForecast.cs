@@ -9,7 +9,7 @@ namespace climapi.Models.Forecast
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public partial class Forecast
+    public partial class ExternalForecast
     {
         [JsonProperty("location")]
         public Location Location { get; set; }
@@ -346,14 +346,14 @@ namespace climapi.Models.Forecast
 
     public enum WindDir { E, Ese, S, Se, Sse };
 
-    public partial class Forecast
+    public partial class ExternalForecast
     {
-        public static Forecast FromJson(string json) => JsonConvert.DeserializeObject<Forecast>(json, climapi.Models.Forecast.Converter.Settings);
+        public static ExternalForecast FromJson(string json) => JsonConvert.DeserializeObject<ExternalForecast>(json, climapi.Models.Forecast.Converter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this Forecast self) => JsonConvert.SerializeObject(self, climapi.Models.Forecast.Converter.Settings);
+        public static string ToJson(this ExternalForecast self) => JsonConvert.SerializeObject(self, climapi.Models.Forecast.Converter.Settings);
     }
 
     internal static class Converter
