@@ -1,8 +1,8 @@
 
-// using climapi.Models.Current;
+using climapi.Models.Current;
 using climapi.Models.MyCurrent;
 using climapi.Models.MyForecast;
-// using climapi.Models.Forecast;
+using climapi.Models.Forecast;
 namespace climapi.Services;
 
 public class WeatherApiClient
@@ -28,9 +28,8 @@ public class WeatherApiClient
         string fullUri = Uri + ReadyParametros();
         var response = await client.GetAsync(fullUri);
         response.EnsureSuccessStatusCode();
-        Models.Current.ExternalCurrent e_current = await response.Content.ReadAsAsync<Models.Current.ExternalCurrent>();
+        ExternalCurrent e_current = await response.Content.ReadAsAsync<ExternalCurrent>();
         MyCurrent m_current = convertCurrents(e_current);
-
         return m_current;
     }
 
@@ -42,25 +41,27 @@ public class WeatherApiClient
         string fullUri = Uri + ReadyParametros();
         var response = await client.GetAsync(fullUri);
         response.EnsureSuccessStatusCode();
-        Models.Forecast.ExternalForecast e_forecast = await response.Content.ReadAsAsync<Models.Forecast.ExternalForecast>();
+        ExternalForecast e_forecast = await response.Content.ReadAsAsync<ExternalForecast>();
         MyForecast m_forecast = convertForecasts(e_forecast);
 
         return m_forecast;
     }
 
-    private MyForecast convertForecasts(Models.Forecast.ExternalForecast e)
+    private MyForecast convertForecasts(ExternalForecast e)
     {
 
         MyForecast m_forecast = new MyForecast()
         {
-            FLocation = e.Location,
+            Location = e.Location,
             Temp_c = e.Current.TempC,
             Temp_f = e.Current.TempF,
             Wind = e.Current.WindKph,
-            Wind_dir = Convert.ToChar(e.Current.WindDir),
-            Condition = e.Current.Condition.Text.ToString(),
+            Wind_dir = e.Current.WindDir,
+            Condition = e.Current.Condition.Text,
             Date = e.Location.Localtime.Substring(0, 10)
         };
+        
+        m_forecast.Siguientes = new List<MyCurrent>();
         foreach (var x in e.ForecastForecast.Forecastday)
         {
             m_forecast.Siguientes.Add(new MyCurrent()
@@ -76,7 +77,7 @@ public class WeatherApiClient
         return m_forecast;
     }
 
-    private MyCurrent convertCurrents(Models.Current.ExternalCurrent e)
+    private MyCurrent convertCurrents(ExternalCurrent e)
     {
         MyCurrent m = new MyCurrent()
         {
@@ -84,7 +85,7 @@ public class WeatherApiClient
             Temp_c = e.CurrentCurrent.TempC,
             Temp_f = e.CurrentCurrent.TempF,
             Wind = e.CurrentCurrent.WindKph,
-            Wind_dir = Convert.ToChar(e.CurrentCurrent.WindDir),
+            Wind_dir = e.CurrentCurrent.WindDir,
             Condition = e.CurrentCurrent.Condition.Text,
             Date = e.Location.Localtime.Substring(0, 10)
         };

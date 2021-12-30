@@ -14,7 +14,7 @@ public class WeatherController : ControllerBase
 
     public WeatherController()
     {
-        string apiKey = "e4ee022633474f34acd163310212812";
+        string apiKey = "yours";
         _weatherApiClient = new WeatherApiClient(apiKey);
     }
 
@@ -37,9 +37,9 @@ public class WeatherController : ControllerBase
         {
             return await _weatherApiClient.getForecastAsync(q, d);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            
+            Console.WriteLine(e.Message);
             return NotFound();
         }
     }
