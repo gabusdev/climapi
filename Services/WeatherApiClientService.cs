@@ -1,6 +1,8 @@
 
-using climapi.Models;
+// using climapi.Models.Current;
 using climapi.Models.MyCurrent;
+using climapi.Models.MyForecast;
+// using climapi.Models.Forecast;
 namespace climapi.Services;
 
 public class WeatherApiClient
@@ -26,13 +28,55 @@ public class WeatherApiClient
         string fullUri = Uri + ReadyParametros();
         var response = await client.GetAsync(fullUri);
         response.EnsureSuccessStatusCode();
-        ExternalCurrent e_current = await response.Content.ReadAsAsync<ExternalCurrent>();
+        Models.Current.ExternalCurrent e_current = await response.Content.ReadAsAsync<Models.Current.ExternalCurrent>();
         MyCurrent m_current = convertCurrents(e_current);
 
         return m_current;
     }
 
-    private MyCurrent convertCurrents(ExternalCurrent e)
+    public async Task<MyForecast> getForecastAsync(string q, string days)
+    {
+        Uri = "forecast.json";
+        Parametros.Add("q", q);
+        Parametros.Add("days", days);
+        string fullUri = Uri + ReadyParametros();
+        var response = await client.GetAsync(fullUri);
+        response.EnsureSuccessStatusCode();
+        Models.Forecast.ExternalForecast e_forecast = await response.Content.ReadAsAsync<Models.Forecast.ExternalForecast>();
+        MyForecast m_forecast = convertForecasts(e_forecast);
+
+        return m_forecast;
+    }
+
+    private MyForecast convertForecasts(Models.Forecast.ExternalForecast e)
+    {
+
+        MyForecast m_forecast = new MyForecast()
+        {
+            FLocation = e.Location,
+            Temp_c = e.Current.TempC,
+            Temp_f = e.Current.TempF,
+            Wind = e.Current.WindKph,
+            Wind_dir = Convert.ToChar(e.Current.WindDir),
+            Condition = e.Current.Condition.Text.ToString(),
+            Date = e.Location.Localtime.Substring(0, 10)
+        };
+        foreach (var x in e.ForecastForecast.Forecastday)
+        {
+            m_forecast.Siguientes.Add(new MyCurrent()
+            {
+                Temp_c = x.Day.AvgtempC,
+                Temp_f = x.Day.AvgtempF,
+                Wind = x.Day.MaxwindKph,
+                Condition = x.Day.Condition.Text.ToString(),
+                Date = x.Date.ToString()
+            });
+        }
+
+        return m_forecast;
+    }
+
+    private MyCurrent convertCurrents(Models.Current.ExternalCurrent e)
     {
         MyCurrent m = new MyCurrent()
         {
@@ -41,7 +85,8 @@ public class WeatherApiClient
             Temp_f = e.CurrentCurrent.TempF,
             Wind = e.CurrentCurrent.WindKph,
             Wind_dir = Convert.ToChar(e.CurrentCurrent.WindDir),
-            Condition = e.CurrentCurrent.Condition.Text
+            Condition = e.CurrentCurrent.Condition.Text,
+            Date = e.Location.Localtime.Substring(0, 10)
         };
         return m;
     }

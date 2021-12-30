@@ -1,3 +1,4 @@
+using climapi.Models.Current;
 namespace climapi.Models.MyCurrent
 {
     public class MyCurrent
@@ -8,6 +9,7 @@ namespace climapi.Models.MyCurrent
         public double Wind { get; set;}
         public char Wind_dir { get; set;}
         public string? Condition  { get; set;}
+        public string? Date  { get; set;}
 
     }
 }
