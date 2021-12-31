@@ -23,3 +23,8 @@
   - Utiliza un parametro adicional en la url q es el numero de dias del pronostico      
 
         https:localhost:6060/api/v1/Weather/oslo/forecast/3
+
+
+## Nuget Requeriments
+- Microsoft.AspNet.WebApi.Client
+- Newtonsoft.Json
