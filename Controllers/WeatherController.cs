@@ -14,7 +14,7 @@ public class WeatherController : ControllerBase
 
     public WeatherController()
     {
-        string apiKey = "yours";
+        string apiKey = "e4ee022633474f34acd163310212812";
         _weatherApiClient = new WeatherApiClient(apiKey);
     }
 

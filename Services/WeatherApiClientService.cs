@@ -61,10 +61,10 @@ public class WeatherApiClient
             Date = e.Location.Localtime.Substring(0, 10)
         };
         
-        m_forecast.Siguientes = new List<MyCurrent>();
+        m_forecast.Pronostico = new List<MyCurrent>();
         foreach (var x in e.ForecastForecast.Forecastday)
         {
-            m_forecast.Siguientes.Add(new MyCurrent()
+            m_forecast.Pronostico.Add(new MyCurrent()
             {
                 Temp_c = x.Day.AvgtempC,
                 Temp_f = x.Day.AvgtempF,
