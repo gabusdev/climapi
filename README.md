@@ -1,6 +1,6 @@
 # Climapi
 
-## Descripcíon
+## Descripción
 > Pequeña api con dotnet core  webapi que consumira una api externa para generar sus propias respuestas
 
 * Se consume la Api del sitio [WeatherApi](https://www.weatherapi.com) que entrega info en tiempo real del clima
